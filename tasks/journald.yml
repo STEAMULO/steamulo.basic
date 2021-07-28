@@ -1,0 +1,19 @@
+---
+
+- name: Enable journald persistence
+  file:
+    path: /var/log/journal
+    state: directory
+    mode: "2755"
+    owner: root
+    group: systemd-journal
+  notify: Restart journald
+
+- name: Configure journald
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "^(# *)?{{ item.split('=')[0] | regex_escape() }}"
+    line: "{{ item }}"
+    state: present
+  loop: "{{ basic_journald }}"
+  notify: Restart journald

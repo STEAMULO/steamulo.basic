@@ -1,0 +1,18 @@
+---
+
+galaxy_info:
+  role_name: basic
+  author: steamulo
+  description: Basic configuration and hardening of linux server
+  company: Steamulo
+  license: BSD
+  min_ansible_version: 2.7
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+    - name: EL
+      versions:
+        - 7
+        - 8

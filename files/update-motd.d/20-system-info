@@ -1,0 +1,14 @@
+#!/bin/sh
+
+. /etc/update-motd.d/colors
+
+cores=$(grep -c ^processor /proc/cpuinfo 2>/dev/null)
+[ "$cores" -eq "0" ] && cores=1
+threshold="${cores:-1}.0"
+
+echo
+echo "CPU: $(cat /proc/cpuinfo | grep "name" | cut -d : -f2 | uniq | sed 's/(TM)//g;s/(R)//g;s/CPU//g;s/ \+/ /g' | xargs) (x$(cat /proc/cpuinfo | grep "name" | wc -l))"
+echo "RAM: $(free -h --si | grep "Mem" | awk {'print $2'})"
+echo
+
+printf "\n"

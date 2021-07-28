@@ -1,0 +1,16 @@
+---
+
+- name: Update root .bashrc
+  copy:
+    src: "files/.bashrc"
+    dest: "/root/.bashrc"
+    mode: "u=rw,g=r,o=r"
+
+- name: Update users .bashrc
+  copy:
+    src: "files/.bashrc"
+    dest: "~{{ item.user }}/.bashrc"
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    mode: "u=rw,g=r,o=r"
+  loop: "{{ basic_sudo_users | union(basic_standard_users) }}"

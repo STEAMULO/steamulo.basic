@@ -1,0 +1,10 @@
+// Automatically upgrade security packages
+Unattended-Upgrade::Origins-Pattern {
+    {{ basic_unattended_upgrades_origines_pattern }}
+}
+
+// Send mail to root
+Unattended-Upgrade::Mail "root";
+
+// Automatically reboot
+Unattended-Upgrade::Automatic-Reboot "false";

@@ -1,0 +1,55 @@
+---
+
+# Mandatory package for common role
+basic_mandatory_packages:
+  - aptitude
+  - apt-transport-https
+  - git
+  - software-properties-common
+  - curl
+  - ca-certificates
+  - lsb-release
+  - sudo
+  - python3-minimal
+  - python3-pip
+  - python3-apt
+  - make
+  - gcc
+  - figlet
+  - bc
+  - unattended-upgrades
+  - apt-listchanges
+  - bash-completion
+  - tzdata
+  - locales
+
+# Common package that should be installed
+basic_common_pakages:
+  - logrotate
+  - anacron
+  - vim
+  - dbus
+  - htop
+  - unzip
+  - dnstop
+  - dnsutils
+  - iftop
+  - iotop
+  - dstat
+  - bsd-mailx
+  - ncdu
+  - tree
+  - traceroute
+  - sysstat
+  - memstat
+  - nload
+  - mtr
+  - mc
+  - ngrep
+  - rsync
+  - man-db
+  - lsof
+  - pv
+  - netcat
+  - iperf3
+  - smartmontools

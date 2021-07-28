@@ -1,0 +1,31 @@
+---
+
+- name: Set Hostname
+  hostname:
+    name: "{{ basic_hostname }}"
+
+- name: Put hostname and fqdn in /etc/hosts (fqdn)
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^{{ item | regex_escape() }}'
+    line: '{{ item }} {{ basic_fully_qualified_domain_name }} {{ basic_hostname }} localhost'
+    state: present
+    unsafe_writes: "{{ basic_hosts_unsafe_writes }}"
+  loop:
+    - "127.0.0.1"
+    - "127.0.1.1"
+    - "::1"
+  when: basic_fully_qualified_domain_name is defined and basic_fully_qualified_domain_name
+
+- name: Put hostname and fqdn in /etc/hosts (no fqdn)
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^{{ item | regex_escape() }}'
+    line: '{{ item }} {{ basic_hostname }} localhost'
+    state: present
+    unsafe_writes: "{{ basic_hosts_unsafe_writes }}"
+  loop:
+    - "127.0.0.1"
+    - "127.0.1.1"
+    - "::1"
+  when: not basic_fully_qualified_domain_name

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+. /etc/update-motd.d/colors
+
+if [[ -x /var/run/reboot-required ]]; then
+    printf $LIGHT_RED
+    printf "You should consider rebooting your machine.\n\n"
+    printf $NONE
+fi

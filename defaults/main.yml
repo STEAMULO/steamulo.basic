@@ -1,0 +1,72 @@
+---
+
+# Users in sudo group. Syntax :
+#   - user: <user_name>
+#     authorized_keys:
+#        - <pub_key>
+#     groups:
+#       - <group name>
+#     password: <password : mkpasswd --method=SHA-512>
+basic_sudo_users: []
+
+# Users. Syntax :
+#   - user: <user_name>
+#     authorized_keys:
+#        - <pub_key>
+#     groups:
+#       - <group name>
+#     password: <password : mkpasswd --method=SHA-512>
+basic_standard_users: []
+
+# List of users to remove
+basic_to_remove_users: []
+
+# Could user in sudo group run sudo without password
+basic_passwordless_sudo: false
+
+# Extra packages to install
+basic_extra_packages: []
+
+# Python packages
+basic_pip_packages:
+  - speedtest-cli
+  - bpytop
+
+# Set the time zone of the machine
+basic_time_zone: ""
+
+# Generate and set the locale
+basic_locale: ""
+
+# The public fully quallified domain name of the machine
+basic_fully_qualified_domain_name: ""
+
+# Short hostname
+basic_hostname: ""
+
+# do not use atomic write in /etc/hosts (usefull when file is mounted)
+basic_hosts_unsafe_writes: false
+
+# Redirect mail root to. Can be another account
+# or a full mail
+basic_redirect_root_mail: ""
+
+# The domain name used to 'qualify' mail addresses without a domain name.
+basic_mail_name: "{{ basic_fully_qualified_domain_name }}"
+
+# unattended_upgrades
+basic_unattended_upgrades_origines_pattern: |
+  "origin=Ubuntu,archive=${distro_codename}-security,label=Ubuntu";
+
+# motd.d
+basic_motd_info: |
+  Ansible Infos:
+    ansible_fqdn       : {{ ansible_fqdn }}
+    inventory_hostname : {{ inventory_hostname }}
+    group_names        : {{ group_names | join (', ') }}
+
+# sysctl
+basic_sysctl_config: []
+
+# journald
+basic_journald: []

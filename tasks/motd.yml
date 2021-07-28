@@ -1,0 +1,55 @@
+---
+
+- name: Ensure motd.d dir exists
+  file:
+    path: /etc/update-motd.d
+    mode: u=rwx,g=rx,o=rx
+    state: directory
+
+- name: Remove static motd
+  file:
+    path: /etc/motd
+    state: absent
+
+- name: List already present motd.d files
+  find:
+    paths: /etc/update-motd.d
+    file_type: any
+    excludes:
+      - 00-figlet
+      - 10-banner
+      - 20-system-info
+      - 30-need-reboot
+      - 40-ansible-infos
+      - colors
+  register: found_files
+
+- name: Remove already present motd.d files
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ found_files['files'] }}"
+
+- name: "Configure motd.d static files"
+  copy:
+    src: "update-motd.d/{{ item }}"
+    dest: "/etc/update-motd.d/{{ item }}"
+    mode: "0755"
+    owner: root
+    group: root
+  loop:
+    - 00-figlet
+    - 10-banner
+    - 20-system-info
+    - 30-need-reboot
+    - colors
+
+- name: Configure motd.d ansible files
+  copy:
+    content: |
+      #!/bin/sh
+      printf "{{ basic_motd_info }}\n"
+    dest: /etc/update-motd.d/40-ansible-infos
+    mode: "0755"
+    owner: root
+    group: root

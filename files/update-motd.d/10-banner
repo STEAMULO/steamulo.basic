@@ -1,0 +1,12 @@
+#!/bin/bash
+
+. /etc/update-motd.d/colors
+
+DISTRIB_DESCRIPTION=$(lsb_release -s -d)
+
+re='(.*\()(.*)(\).*)'
+if [[ $DISTRIB_DESCRIPTION =~ $re ]]; then
+    DISTRIB_DESCRIPTION=$(printf "%s%s%s%s%s" "${BASH_REMATCH[1]}" "${YELLOW}" "${BASH_REMATCH[2]}" "${NONE}" "${BASH_REMATCH[3]}")
+fi
+
+echo -e $DISTRIB_DESCRIPTION "(kernel "$(uname -r)")\n"

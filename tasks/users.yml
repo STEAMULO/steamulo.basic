@@ -1,0 +1,66 @@
+---
+
+- name: Ensure admin and sudo groups are present
+  group:
+    name: "{{ item }}"
+  loop:
+    - admin
+    - sudo
+
+- name: Allow sudo group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%sudo'
+    line: '%sudo ALL=(ALL:ALL) NOPASSWD: ALL'
+    validate: visudo -cf %s
+  when: basic_passwordless_sudo
+
+- name: Creating users groups (1)
+  group:
+    name: "{{ item }}"
+  loop: "{{ basic_sudo_users | union(basic_standard_users) | map(attribute='user') | list }}"
+
+- name: Creating users groups (2)
+  group:
+    name: "{{ item }}"
+  loop: "{{ basic_sudo_users | union(basic_standard_users) | selectattr('groups','defined') | map(attribute='groups') | flatten }}"
+
+- name: Creating sudo users
+  user:
+    name: "{{ item.user }}"
+    password: "{{ item.password | default(omit) }}"
+    group: "{{ item.user }}"
+    shell: /bin/bash
+    groups: "{{ (item.groups | default([])) | union(['sudo','admin']) }}"
+    append: true
+  loop: "{{ basic_sudo_users }}"
+
+- name: Creating standard users
+  user:
+    name: "{{ item.user }}"
+    password: "{{ item.password | default(omit) }}"
+    group: "{{ item.user }}"
+    shell: /bin/bash
+    groups: "{{ item.groups | default([]) }}"
+    append: true
+  loop: "{{ basic_standard_users }}"
+
+- name: Add authorized_key to users
+  authorized_key:
+    user: "{{ item.user }}"
+    key: "{{ item.authorized_keys | join('\n') }}"
+    exclusive: true
+  loop: "{{ basic_sudo_users | union(basic_standard_users) }}"
+
+- name: Lock root user (passwd -l root equivalent)
+  user:
+    name: root
+    password: "!"
+
+- name: Remove old users
+  user:
+    name: "{{ item }}"
+    state: absent
+    remove: true
+  loop: "{{ basic_to_remove_users }}"

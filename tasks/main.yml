@@ -1,0 +1,53 @@
+---
+
+- name: Assert that mandatory vars are set
+  assert:
+    that: basic_hostname is defined and basic_hostname
+
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: basic_basic_always
+
+- name: set sysctl keys
+  sysctl:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ basic_sysctl_config }}"
+  when: basic_sysctl_config is defined and basic_sysctl_config
+  tags: basic_basic_sysctl
+
+- include: pkg.yml
+  tags: basic_basic_pkg
+
+- include: time.yml
+  tags: basic_basic_time
+
+- include: locale.yml
+  when: basic_locale is defined and basic_locale
+  tags: basic_locale
+
+- include: users.yml
+  tags: basic_users
+
+- include: ssh.yml
+  tags: basic_ssh
+
+- include: bash.yml
+  tags: basic_bash
+
+- include: fqdn.yml
+  tags: basic_fqdn
+
+- include: mail.yml
+  tags: basic_mail
+
+- include: unattended-upgrades.yml
+  when: ansible_distribution == 'Ubuntu'
+  tags: basic_unattended_upgrades
+
+- include: motd.yml
+  tags: basic_motd
+
+- include: journald.yml
+  tags: basic_journald

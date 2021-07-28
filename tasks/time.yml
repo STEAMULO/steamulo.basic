@@ -1,0 +1,34 @@
+---
+
+- name: Ensure systemd-timesyncd is present (CentOS 8)
+  package:
+    name: systemd-timesyncd
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '8'
+
+- name: Ensure chrony is present (CentOS 7)
+  package:
+    name: chrony
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
+
+- name: Ensure ntp daemon is absent (Debian)
+  package:
+    name: ntp
+    state: absent
+  when: ansible_os_family == 'Debian'
+
+- name: Run timedatectl status
+  command: /usr/bin/timedatectl status
+  changed_when: False
+  check_mode: no
+  register: basic_timedatectl_result
+
+- name: Enable timedatectl ntp
+  command: "/usr/bin/timedatectl set-ntp yes"
+  when: "not ('systemd-timesyncd.service active: yes' in basic_timedatectl_result.stdout
+              or 'NTP enabled: yes' in basic_timedatectl_result.stdout
+              or 'NTP service: active' in basic_timedatectl_result.stdout)"
+
+- name: Set timezone
+  timezone:
+    name: "{{ basic_time_zone }}"
+  when: basic_time_zone is defined and basic_time_zone
