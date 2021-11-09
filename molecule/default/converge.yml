@@ -22,3 +22,8 @@
               - bar
         basic_time_zone: "Etc/UTC"
         basic_locale: "en_US.UTF-8"
+        basic_locale_list:
+          - "fr_FR.UTF-8"
+          - "fr_LU.UTF-8"
+          - "ar_IN.UTF-8"
+          - "ga_IE.UTF-8"

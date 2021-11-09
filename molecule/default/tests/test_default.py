@@ -28,6 +28,14 @@ def test_locale(host):
     assert 'LANG=en_US.UTF-8' in host.run("localectl status").stdout
 
 
+def test_locale_list(host):
+    locale_list = host.run("localectl list-locales").stdout
+    assert 'fr_FR' in locale_list
+    assert 'ar_IN' in locale_list
+    assert 'ga_IE' in locale_list
+    assert 'fr_LU' in locale_list
+
+
 def test_ntp(host):
     assert ('System clock synchronized: yes' in host.run("timedatectl status").stdout
             or 'NTP enabled: yes' in host.run("timedatectl status").stdout)
