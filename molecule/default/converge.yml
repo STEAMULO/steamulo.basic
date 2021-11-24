@@ -3,7 +3,7 @@
   hosts: instance
   become: true
   roles:
-    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"
+    - role: "steamulo.basic"
       vars:
         basic_hostname: instance
         basic_redirect_root_mail: admin@example.com

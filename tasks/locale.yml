@@ -2,8 +2,8 @@
 
 - name: Run timedatectl status
   command: /usr/bin/localectl status
-  changed_when: False
-  check_mode: no
+  changed_when: false
+  check_mode: false
   register: basic_localectl_result
 
 - name: Add local to gen list
