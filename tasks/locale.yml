@@ -1,19 +1,26 @@
 ---
 
-- name: Run timedatectl status
+- name: Run localectl status
   command: /usr/bin/localectl status
   changed_when: false
   check_mode: false
-  register: basic_localectl_result
+  register: basic_localectl_status_result
+
+- name: Run localectl list-locales
+  command: /usr/bin/localectl list-locales
+  changed_when: false
+  check_mode: false
+  register: basic_localectl_list_result
 
 - name: Add local to gen list
   lineinfile:
     dest: "/etc/locale.gen"
-    regexp: "^(# *)?{{ basic_locale }} UTF-8$"
-    line: "{{ basic_locale }} UTF-8"
+    regexp: "^(# *)?{{ item }} UTF-8$"
+    line: "{{ item }} UTF-8"
     state: present
   register: basic_locale_genlist_result
   when: ansible_os_family == 'Debian'
+  loop: "{{ basic_locale_list + [ basic_locale ] }}"
 
 - name: Check if local should be generated
   set_fact:
@@ -24,9 +31,10 @@
   when: ansible_os_family == 'Debian' and basic_regen_locale
 
 - name: Regenerate locale
-  command: "/usr/bin/localedef -f {{ basic_locale.split('.')[1] }} -i {{ basic_locale.split('.')[0] }} {{ basic_locale }}"
-  when: "'System Locale: LANG=' + basic_locale not in basic_localectl_result.stdout"
+  command: "/usr/bin/localedef -i {{ item.split('.')[0] }} -f {{ item.split('.')[1] }} {{ item }}"
+  when: "item.split('.')[0] not in basic_localectl_list_result.stdout"
+  loop: "{{ basic_locale_list + [ basic_locale ] }}"
 
 - name: Set local
   command: "/usr/bin/localectl set-locale LANG={{ basic_locale }}"
-  when: "'System Locale: LANG='  + basic_locale not in basic_localectl_result.stdout"
+  when: "'System Locale: LANG='  + basic_locale not in basic_localectl_status_result.stdout"

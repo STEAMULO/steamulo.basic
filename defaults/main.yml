@@ -38,6 +38,9 @@ basic_time_zone: ""
 # Generate and set the locale
 basic_locale: ""
 
+# Locale list to generate (only UTF-8 locales are supported)
+basic_locale_list: []
+
 # The public fully quallified domain name of the machine
 basic_fully_qualified_domain_name: ""
 
