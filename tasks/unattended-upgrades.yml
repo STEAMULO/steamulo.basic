@@ -7,18 +7,28 @@
     line: 'which=both'
     state: present
 
+- name: Remove potential APT config duplicates
+  file:
+    path: "/etc/apt/apt.conf.d/{{ item }}"
+    state: absent
+  loop:
+    - 02periodic
+    - 10periodic
+    - 20auto-upgrades
+    - 50unattended-upgrades
+
 - name: Enable APT automatic update
   template:
-    src: unattended-upgrade/02periodic.j2
-    dest: /etc/apt/apt.conf.d/02periodic
+    src: unattended-upgrade/periodic.j2
+    dest: /etc/apt/apt.conf.d/90periodic
     mode: "0644"
     owner: root
     group: root
 
 - name: Adjust APT automatic update configuration
   template:
-    src: unattended-upgrade/50unattended-upgrades.j2
-    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    src: unattended-upgrade/unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/91unattended-upgrades
     mode: "0644"
     owner: root
     group: root
