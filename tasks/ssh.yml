@@ -23,3 +23,11 @@
     line: "AllowAgentForwarding yes"
     state: present
   notify: Restart ssh
+
+- name: Allow tcp forwarding
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^(# *)?AllowTcpForwarding"
+    line: "AllowTcpForwarding yes"
+    state: present
+  notify: Restart ssh
