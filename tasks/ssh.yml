@@ -15,3 +15,11 @@
     line: "PermitRootLogin no"
     state: present
   notify: Restart ssh
+
+- name: Allow agent forwarding
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^(# *)?AllowAgentForwarding"
+    line: "AllowAgentForwarding yes"
+    state: present
+  notify: Restart ssh
