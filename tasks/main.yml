@@ -36,8 +36,8 @@
 - include: bash.yml
   tags: basic_bash
 
-- include: fqdn.yml
-  tags: basic_fqdn
+- include: hostname.yml
+  tags: basic_hostname
 
 - include: mail.yml
   tags: basic_mail

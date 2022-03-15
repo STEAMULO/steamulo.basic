@@ -18,7 +18,7 @@
     - "::1"
   when: basic_fully_qualified_domain_name is defined and basic_fully_qualified_domain_name
 
-- name: Put hostname and fqdn in /etc/hosts (no fqdn)
+- name: Put hostname /etc/hosts (no fqdn)
   lineinfile:
     dest: /etc/hosts
     regexp: '^{{ item | regex_escape() }}'
