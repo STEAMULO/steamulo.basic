@@ -10,6 +10,7 @@
     regexp: '^{{ item | regex_escape() }}'
     line: '{{ item }} {{ basic_fully_qualified_domain_name }} {{ basic_hostname }} localhost'
     state: present
+    firstmatch: true
     unsafe_writes: "{{ basic_hosts_unsafe_writes }}"
   loop:
     - "127.0.0.1"
@@ -23,6 +24,7 @@
     regexp: '^{{ item | regex_escape() }}'
     line: '{{ item }} {{ basic_hostname }} localhost'
     state: present
+    firstmatch: true
     unsafe_writes: "{{ basic_hosts_unsafe_writes }}"
   loop:
     - "127.0.0.1"
