@@ -5,9 +5,5 @@ Unattended-Upgrade::Origins-Pattern {
     {{ basic_unattended_upgrades_origines_pattern }}
 }
 
-// Send mail to root
-Unattended-Upgrade::Mail "root";
-Unattended-Upgrade::MailReport "only-on-error";
-
 // Automatically reboot
 Unattended-Upgrade::Automatic-Reboot "false";
