@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8]
-        distribution: [centos7, centos8, ubuntu1804, ubuntu2004]
+        distribution: [centos7, centos8, ubuntu1804, ubuntu2004, ubuntu2204]
 
     steps:
       - name: Check out the codebase.
