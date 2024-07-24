@@ -61,7 +61,12 @@
 - name: Set chattr -R -a on users' files and directories
   command: "chattr -R -a /home/{{ item }}"
   loop: "{{ basic_to_remove_users }}"
-  when: basic_to_remove_users is defined and basic_to_remove_users | length > 0
+  when:
+    - basic_to_remove_users is defined
+    - basic_to_remove_users | length > 0
+    - ansible.builtin.stat(path="/home/{{ item }}").stat.exists
+  vars:
+    ansible_become: yes
 
 - name: Remove old users
   user:
