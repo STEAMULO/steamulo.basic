@@ -64,9 +64,19 @@
   when:
     - basic_to_remove_users is defined
     - basic_to_remove_users | length > 0
-    - ansible.builtin.stat(path="/home/{{ item }}").stat.exists
+    - stat_result.stat.exists
   vars:
     ansible_become: yes
+  register: stat_result
+  tasks:
+    - name: Check if user home directory exists
+      stat:
+        path: "/home/{{ item }}"
+      register: stat_result
+      loop: "{{ basic_to_remove_users }}"
+      when:
+        - basic_to_remove_users is defined
+        - basic_to_remove_users | length > 0
 
 - name: Remove old users
   user:
