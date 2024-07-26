@@ -16,7 +16,7 @@ basic_mandatory_packages:
   - bc
   - bash-completion
   - tzdata
-  - redhat-lsb-core
+  - python3-distro
 
 ## Common package that should be installed
 basic_common_pakages:
