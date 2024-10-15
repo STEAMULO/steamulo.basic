@@ -61,3 +61,4 @@ ubuntu_22_packages:
 
 ubuntu_24_packages:
   - netcat-traditional
+  - pipx

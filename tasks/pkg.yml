@@ -38,10 +38,9 @@
 
 - name: Install pip packages with extra args for Ubuntu 24
   pip:
-    executable: pip3
+    executable: pipx
     name: "{{ basic_pip_packages }}"
     state: present
-    extra_args: --break-system-packages
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24'
 
 - name: Install pip packages
