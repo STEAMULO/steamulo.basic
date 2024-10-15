@@ -26,7 +26,7 @@ basic_mandatory_packages:
   - locales
 
 # Common package that should be installed
-basic_common_pakages:
+basic_common_packages:
   - logrotate
   - anacron
   - vim
@@ -53,6 +53,12 @@ basic_common_pakages:
   - man-db
   - lsof
   - pv
-  - netcat
   - iperf3
   - smartmontools
+
+ubuntu_22_packages:
+  - netcat
+
+ubuntu_24_packages:
+  - netcat-traditional
+  - pipx
