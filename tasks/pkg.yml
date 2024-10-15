@@ -17,7 +17,7 @@
 
 - name: Install common packages
   package:
-    name: "{{ basic_common_pakages }}"
+    name: "{{ basic_common_packages }}"
 
 - name: Set specific packages based on Ubuntu version
   set_fact:
@@ -27,7 +27,7 @@
 
 - name: Install common and specific packages
   package:
-    name: "{{ basic_common_packages + specific_packages }}"
+    name: "{{ basic_extra_packages + specific_packages }}"
     state: present
 
 - name: Ensure Python2 lib are presents (CentOS 7)
