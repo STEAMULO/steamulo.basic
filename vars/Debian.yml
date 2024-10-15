@@ -53,6 +53,11 @@ basic_common_pakages:
   - man-db
   - lsof
   - pv
-  - netcat
   - iperf3
   - smartmontools
+
+ubuntu_22_packages:
+  - netcat
+
+ubuntu_24_packages:
+  - netcat-traditional

@@ -19,9 +19,15 @@
   package:
     name: "{{ basic_common_pakages }}"
 
-- name: Install extra packages
+- name: Set specific packages based on Ubuntu version
+  set_fact:
+    specific_packages: >-
+      {{ ubuntu_22_packages if ansible_distribution == 'Ubuntu' and ansible_distribution_version == '22' else
+         ubuntu_24_packages if ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24' else [] }}
+
+- name: Install common and specific packages
   package:
-    name: "{{ basic_extra_packages }}"
+    name: "{{ basic_common_pakages + specific_packages }}"
     state: present
 
 - name: Ensure Python2 lib are presents (CentOS 7)
@@ -30,8 +36,17 @@
       - python-setuptools
   when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
 
+- name: Install pip packages with extra args for Ubuntu 24
+  pip:
+    executable: pip3
+    name: "{{ basic_pip_packages }}"
+    state: present
+    extra_args: --break-system-packages
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24'
+
 - name: Install pip packages
   pip:
     executable: pip3
     name: "{{ basic_pip_packages }}"
     state: present
+  when: not (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '24')
