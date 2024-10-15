@@ -27,7 +27,7 @@
 
 - name: Install common and specific packages
   package:
-    name: "{{ basic_common_pakages + specific_packages }}"
+    name: "{{ basic_common_packages + specific_packages }}"
     state: present
 
 - name: Ensure Python2 lib are presents (CentOS 7)

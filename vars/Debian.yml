@@ -26,7 +26,7 @@ basic_mandatory_packages:
   - locales
 
 # Common package that should be installed
-basic_common_pakages:
+basic_common_packages:
   - logrotate
   - anacron
   - vim
