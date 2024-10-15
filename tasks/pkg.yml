@@ -25,7 +25,7 @@
       {{ ubuntu_22_packages if ansible_distribution == 'Ubuntu' and ansible_distribution_version is version_compare('22', '<=') else
          ubuntu_24_packages if ansible_distribution == 'Ubuntu' and ansible_distribution_version is version_compare('24', '>=') else [] }}
 
-- name: Install common and specific packages
+- name: Install extra and specific packages
   package:
     name: "{{ basic_extra_packages + specific_packages }}"
     state: present
