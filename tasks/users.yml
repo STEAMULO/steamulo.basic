@@ -7,14 +7,14 @@
     - admin
     - sudo
 
-- name: Allow sudo group to have passwordless sudo
-  lineinfile:
+- name: Configure sudoers file for each user
+  blockinfile:
     dest: /etc/sudoers
     state: present
-    regexp: '^%sudo'
-    line: '%sudo ALL=(ALL:ALL) NOPASSWD: ALL'
+    block: |
+      {{ item.user }} ALL=(ALL:ALL) {{ 'NOPASSWD: ALL' if not item.sudo_password and basic_passwordless_sudo else 'ALL' }}
     validate: visudo -cf %s
-  when: basic_passwordless_sudo
+  loop: "{{ basic_sudo_users }}"
 
 - name: Creating users groups (1)
   group:
@@ -52,6 +52,18 @@
     key: "{{ item.authorized_keys | join('\n') }}"
     exclusive: true
   loop: "{{ basic_sudo_users | union(basic_standard_users) }}"
+  when: item.authorized_keys is defined and item.authorized_keys | length > 0
+
+- name: Ensure users can SSH via password if no authorized keys are defined
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    block: |
+      Match User {{ item.user }}
+          PasswordAuthentication yes
+  when: item.authorized_keys is not defined or item.authorized_keys | length == 0
+  loop: "{{ basic_sudo_users | union(basic_standard_users) }}"
+  notify: Restart ssh
 
 - name: Lock root user (passwd -l root equivalent)
   user:
