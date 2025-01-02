@@ -54,6 +54,16 @@
   loop: "{{ basic_sudo_users | union(basic_standard_users) }}"
   when: item.authorized_keys is defined and item.authorized_keys | length > 0
 
+- name: Ensure users can SSH via password if no authorized keys are defined
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication yes'
+  when: item.authorized_keys is not defined or item.authorized_keys | length == 0
+  loop: "{{ basic_sudo_users | union(basic_standard_users) }}"
+  notify: Restart SSH
+
 - name: Lock root user (passwd -l root equivalent)
   user:
     name: root
