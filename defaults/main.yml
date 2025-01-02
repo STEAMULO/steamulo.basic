@@ -7,6 +7,7 @@
 #     groups:
 #       - <group name>
 #     password: <password : mkpasswd --method=SHA-512>
+#     sudo_password: <boolean>  # Indicates if a password is required for sudo
 basic_sudo_users: []
 
 # Users. Syntax :
