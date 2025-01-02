@@ -16,6 +16,16 @@
     validate: visudo -cf %s
   loop: "{{ basic_sudo_users }}"
 
+- name: Creating users groups (1)
+  group:
+    name: "{{ item }}"
+  loop: "{{ basic_sudo_users | union(basic_standard_users) | map(attribute='user') | list }}"
+
+- name: Creating users groups (2)
+  group:
+    name: "{{ item }}"
+  loop: "{{ basic_sudo_users | union(basic_standard_users) | selectattr('groups','defined') | map(attribute='groups') | flatten }}"
+
 - name: Creating sudo users
   user:
     name: "{{ item.user }}"
@@ -43,6 +53,11 @@
     exclusive: true
   loop: "{{ basic_sudo_users | union(basic_standard_users) }}"
   when: item.authorized_keys is defined and item.authorized_keys | length > 0
+
+- name: Lock root user (passwd -l root equivalent)
+  user:
+    name: root
+    password: "!"
 
 #- name: Set chattr -R -a on users' files and directories  TODO fix me
 #  command: "chattr -R -a /home/{{ item }}"
