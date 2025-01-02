@@ -63,7 +63,7 @@
           PasswordAuthentication yes
   when: item.authorized_keys is not defined or item.authorized_keys | length == 0
   loop: "{{ basic_sudo_users | union(basic_standard_users) }}"
-  notify: Restart SSH
+  notify: Restart ssh
 
 - name: Lock root user (passwd -l root equivalent)
   user:
