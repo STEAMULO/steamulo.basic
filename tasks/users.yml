@@ -61,6 +61,7 @@
         PasswordAuthentication yes
     mode: '0644'
   loop: "{{ basic_sudo_users | union(basic_standard_users) | selectattr('password', 'defined')  | selectattr('allow_password_auth', 'defined') | selectattr('allow_password_auth', 'equalto', true) }}"
+  notify: Restart ssh
 
 - name: Lock root user (passwd -l root equivalent)
   user:

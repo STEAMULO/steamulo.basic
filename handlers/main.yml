@@ -8,7 +8,7 @@
 - name: Populate service facts
   ansible.builtin.service_facts:
 
-- name: Restart the correct SSH service
+- name: Restart ssh
   service:
     name: "{{ 'sshd' if 'sshd' in ansible_facts.services else 'ssh' }}"
     state: reloaded
