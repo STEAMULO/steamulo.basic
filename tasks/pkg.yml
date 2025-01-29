@@ -41,7 +41,6 @@
     executable: pipx
     name: "{{ basic_pip_packages }}"
     state: present
-    extra_args: --break-system-packages
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version_compare('24', '>=')
 
 - name: Install pip packages
