@@ -5,10 +5,7 @@
     name: systemd-journald
     state: restarted
 
-- name: Populate service facts
-  ansible.builtin.service_facts:
-
 - name: Restart ssh
   service:
-    name: "{{ 'sshd' if 'sshd' in ansible_facts.services else 'ssh' }}"
+    name: ssh
     state: reloaded
